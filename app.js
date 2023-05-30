@@ -1,12 +1,16 @@
 require('dotenv').config();
+const https = require('https');
+const fs = require('fs');
+const express = require('express');
 
-const http = require('http');
-const server = http.createServer((req, res) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('Hello World');
-});
+const app = express();
 
-server.listen(process.env.PORT, process.env.HOST, () => {
-    console.log('Server Listening on ' + process.env.HOST + ':' + process.env.PORT);
-});
+const options = {
+    key: fs.readFileSync("localhost1.key"),
+    cert: fs.readFileSync("localhost1.crt")
+  };
+
+https.createServer(options, (req, res) => {
+  res.writeHead(200);
+  res.end("Hello World\n");
+}).listen(process.env.PORT);
